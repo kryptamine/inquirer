@@ -1,0 +1,10 @@
+{
+    "require": {
+        "silex/silex": "^2.0",
+        "knplabs/console-service-provider": "^2.2",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {"Inquirer\\": "src/"}
+    }
+}
