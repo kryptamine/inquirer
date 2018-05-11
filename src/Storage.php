@@ -78,6 +78,11 @@ class Storage
         $this->set($data);
     }
 
+    public function save()
+    {
+        $this->set($this->data);
+    }
+
     /**
      * @return mixed
      * @throws StorageException

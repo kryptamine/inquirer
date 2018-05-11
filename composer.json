@@ -2,7 +2,8 @@
     "require": {
         "silex/silex": "^2.0",
         "knplabs/console-service-provider": "^2.2",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "monolog/monolog": "^1.23"
     },
     "autoload": {
         "psr-4": {"Inquirer\\": "src/"}
