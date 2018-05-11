@@ -1,0 +1,232 @@
+[
+	{
+		"type": "question",
+		"message": "Which version of PHP had never been released?",
+		"options": [
+			{
+				"message": "PHP 4",
+				"value": 0
+			}, {
+				"message": "PHP 5",
+				"value": 0
+			}, {
+				"message": "PHP 6",
+				"value": 80
+			}, {
+				"message": "PHP 7",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "How to check the equality of two variables containing strings?",
+		"options": [
+			{
+				"message": "=",
+				"value": 0
+			}, {
+				"message": "==",
+				"value": 0
+			}, {
+				"message": "===",
+				"value": 100
+			}, {
+				"message": "<=>",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What will be the output of the following?\n<code>var_dump(0123 == 123);</code>",
+		"options": [
+			{
+				"message": "true",
+				"value": 0
+			}, {
+				"message": "false",
+				"value": 120
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What will be the output of the following?\n<code>var_dump('0321' == 321);</code>",
+		"options": [
+			{
+				"message": "false",
+				"value": 0
+			}, {
+				"message": "true",
+				"value": 120
+			}, {
+				"message": "null",
+				"value": 0
+			}, {
+				"message": "Syntax error",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "How does null coalescing operator look like?",
+		"options": [
+			{
+				"message": "<=>",
+				"value": 0
+			}, {
+				"message": "?",
+				"value": 0
+			}, {
+				"message": "?:",
+				"value": 0
+			}, {
+				"message": "??",
+				"value": 100
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "How many bits are necessary to encode numbers from 0 to 1000?",
+		"options": [
+			{
+				"message": "8",
+				"value": 0
+			}, {
+				"message": "10",
+				"value": 100
+			}, {
+				"message": "16",
+				"value": 0
+			}, {
+				"message": "32",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What is the difference between <code>\"string\"</code> and <code>'string'</code>?",
+		"options": [
+			{
+				"message": "no difference",
+				"value": 0
+			}, {
+				"message": "\"string\" is evaluated",
+				"value": 100
+			}, {
+				"message": "\"string\" is faster",
+				"value": 0
+			}, {
+				"message": "'string' is evaluated",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "Which of the following is not a superglobal variable?",
+		"options": [
+			{
+				"message": "$_POST",
+				"value": 0
+			}, {
+				"message": "$_GET",
+				"value": 0
+			}, {
+				"message": "$_FORM",
+				"value": 80
+			}, {
+				"message": "$_FILES",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "How to concatenate two strings?",
+		"options": [
+			{
+				"message": "$a + $b",
+				"value": 0
+			}, {
+				"message": "$a .= $b",
+				"value": 100
+			}, {
+				"message": "concat($a, $b)",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "Is it possible to create an instance of the <code>Trait</code>?",
+		"options": [
+			{
+				"message": "yes",
+				"value": 0
+			}, {
+				"message": "no",
+				"value": 100
+			}, {
+				"message": "it depends",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "Which of the following is a valid operator?",
+		"options": [
+			{
+				"message": ">",
+				"value": 20
+			}, {
+				"message": "**",
+				"value": 20
+			}, {
+				"message": "%",
+				"value": 20
+			}, {
+				"message": "<=>",
+				"value": 20
+			}, {
+				"message": "Все перечисленные",
+				"value": 100
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "Which function can sort an array using Quicksort algorithm?",
+		"options": [
+			{
+				"message": "sort",
+				"value": 100
+			}, {
+				"message": "asort",
+				"value": 0
+			}, {
+				"message": "nsort",
+				"value": 0
+			}, {
+				"message": "qsort",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "Which of the following is not a well-known PHP framework?",
+		"options": [
+			{
+				"message": "Yii",
+				"value": 0
+			}, {
+				"message": "Symfony",
+				"value": 0
+			}, {
+				"message": "React",
+				"value": 80
+			}, {
+				"message": "Laravel",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "info",
+		"action": "summarize",
+		"message": ""
+	}
+]

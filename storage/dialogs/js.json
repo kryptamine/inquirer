@@ -1,0 +1,301 @@
+[
+	{
+		"type": "question",
+		"message": "What is a valid method of the console object?",
+		"options": [
+			{
+				"message": "log",
+				"value": 20
+			}, {
+				"message": "trace",
+				"value": 20
+			}, {
+				"message": "error",
+				"value": 20
+			}, {
+				"message": "table",
+				"value": 20
+			}, {
+				"message": "Все перечисленные",
+				"value": 100
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What was the initial name for ES2015?",
+		"options": [
+			{
+				"message": "ES4",
+				"value": 0
+			}, {
+				"message": "ES5",
+				"value": 0
+			}, {
+				"message": "ES6",
+				"value": 20
+			}, {
+				"message": "ES7",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "Which tag is used to import JavaScript file into HTML?",
+		"options": [
+			{
+				"message": "link",
+				"value": 0
+			}, {
+				"message": "import",
+				"value": 0
+			}, {
+				"message": "script",
+				"value": 50
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What will be the result of expression?\n<code>[] + 1 + 2</code>",
+		"options": [
+			{
+				"message": "0",
+				"value": 0
+			}, {
+				"message": "1",
+				"value": 0
+			}, {
+				"message": "3",
+				"value": 0
+			}, {
+				"message": "\"12\"",
+				"value": 150
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "How to find the element in the DOM with id <code>\"content\"</code>?",
+		"options": [
+			{
+				"message": "document.getElement(\"content\")",
+				"value": 0
+			}, {
+				"message": "document.getElementById(\"content\")",
+				"value": 80
+			}, {
+				"message": "document.getElementById(\"#content\")",
+				"value": 0
+			}, {
+				"message": "document.getById(\"content\")",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What will be the output?\n<code>console.log(NaN === NaN)</code>",
+		"options": [
+			{
+				"message": "true",
+				"value": 0
+			}, {
+				"message": "false",
+				"value": 100
+			}, {
+				"message": "TypeError",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What will be the result of expression?\n<code>10 > 9 > 8 === true</code>",
+		"options": [
+			{
+				"message": "true",
+				"value": 0
+			}, {
+				"message": "false",
+				"value": 180
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "Which statement does not exist?",
+		"options": [
+			{
+				"message": "for each",
+				"value": 100
+			}, {
+				"message": "for of",
+				"value": 0
+			}, {
+				"message": "for in",
+				"value": 0
+			}, {
+				"message": "for",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "Which ECMAScript specification was abandoned?",
+		"options": [
+			{
+				"message": "3rd",
+				"value": 0
+			}, {
+				"message": "4th",
+				"value": 40
+			}, {
+				"message": "5th",
+				"value": 0
+			}, {
+				"message": "6th",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "Which is an invalid variable declaration?",
+		"options": [
+			{
+				"message": "var a = 1;",
+				"value": 0
+			}, {
+				"message": "const a = 1;",
+				"value": 0
+			}, {
+				"message": "val a = 1;",
+				"value": 100
+			}, {
+				"message": "let a = 1;",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What is the most starred JavaScript framework/library on GitHub?",
+		"options": [
+			{
+				"message": "jQuery",
+				"value": 0
+			}, {
+				"message": "React",
+				"value": 40
+			}, {
+				"message": "Vue",
+				"value": 0
+			}, {
+				"message": "Angular",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What will be the result of expression?\n<code>\"1\" - - \"1\"</code>",
+		"options": [
+			{
+				"message": "0",
+				"value": 0
+			}, {
+				"message": "11",
+				"value": 0
+			}, {
+				"message": "2",
+				"value": 140
+			}, {
+				"message": "\"11\"",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What will be the result of expression?\n<code>new Array(5).toString()</code>",
+		"options": [
+			{
+				"message": "\",,,,\"",
+				"value": 120
+			}, {
+				"message": "[]",
+				"value": 0
+			}, {
+				"message": "\"[]\"",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What will be the result of expression?\n<code>'2' in ['foo', 'bar', 'baz']</code>",
+		"options": [
+			{
+				"message": "null",
+				"value": 0
+			}, {
+				"message": "false",
+				"value": 0
+			}, {
+				"message": "true",
+				"value": 120
+			}, {
+				"message": "ReferenceError",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What will be the result of expression?\n<code>\"This is a string\" instanceof String</code>",
+		"options": [
+			{
+				"message": "true",
+				"value": 0
+			}, {
+				"message": "false",
+				"value": 100
+			}, {
+				"message": "undefined",
+				"value": 0
+			}, {
+				"message": "TypeError",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "What will be the result of expression?\n<code>\"Hello World\".bold().italics()</code>",
+		"options": [
+			{
+				"message": "Empty string",
+				"value": 0
+			}, {
+				"message": "\"Hello World\"",
+				"value": 0
+			}, {
+				"message": "TypeError",
+				"value": 0
+			}, {
+				"message": "\"<i><b>Hello World</b></i>\"",
+				"value": 100
+			}
+		]
+	}, {
+		"type": "question",
+		"message": "When was the initial release of Node.js?",
+		"options": [
+			{
+				"message": "1999",
+				"value": 0
+			}, {
+				"message": "2003",
+				"value": 0
+			}, {
+				"message": "2009",
+				"value": 20
+			}, {
+				"message": "2014",
+				"value": 0
+			}
+		]
+	}, {
+		"type": "info",
+		"action": "summarize",
+		"message": ""
+	}
+]
