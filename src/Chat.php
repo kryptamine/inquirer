@@ -46,29 +46,7 @@ class Chat
                                 break;
                             }
                             Registry::getInstance()->getLog()->info("Summarize result for run '{$item->runId}'");
-                            $runItems = $this->getConversationItemsByRunId($item->runId);
-                            $maxValue = $this->getTotalMaxValue($runItems);
-                            $value = $this->getOverallValue($runItems);
-                            $time = $this->getOverallTime($runItems);
-
-                            $minutes = floor($time / 60);
-                            $seconds = $time - round($minutes * 60);
-                            if (59 < $minutes) {
-                                $stringTime = "Больше часа?! :-O";
-                            } else {
-                                $stringTime = ($minutes < 10 ? '0' . $minutes : $minutes) . ':' . ($seconds < 10 ? '0' . $seconds : $seconds);
-                            }
-
-                            if ($maxValue > 0) {
-                                $percentage = ($value / $maxValue) * 100;
-                            } else {
-                                $percentage = 0;
-                            }
-                            if ($percentage < 80) {
-                                $item->message = "Вы ответили на все вопросы квиза за <b>{$stringTime}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных.\n\n<i>К сожалению, этого недостаточно, однако крутой стикер-пак ждет вас на стенде Plesk. Спасибо за игру!</i>";
-                            } else {
-                                $item->message = "Вы ответили на все вопросы квиза за <b>{$stringTime}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных. Отличный результат!\n\n<b>Подходите на стенд Plesk за своим подарком и крутым стикер-паком. Спасибо за игру!</b>";
-                            }
+                            $item->message = $this->getSummarizedMessage($item->dialogName, $item->runId);
                             break;
                     }
                 }
@@ -76,6 +54,31 @@ class Chat
             }
         }
         return null;
+    }
+
+    protected function getSummarizedMessage($dialogName, $runId)
+    {
+        $runItems = $this->getConversationItemsByRunId($runId);
+        $maxValue = $this->getTotalMaxValue($runItems);
+        $value = $this->getOverallValue($runItems);
+        $time = $this->getOverallTime($runItems);
+        $runsCount = $this->getRunsCount($dialogName);
+
+        $timeRepresentation = $this->getTimeRepresentation($time);
+
+        if (1 < $runsCount) {
+            return "Попытка <b>#{$runsCount}</b>: вы набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных за <b>{$timeRepresentation}</b>.";
+        }
+
+        if ($maxValue > 0) {
+            $percentage = ($value / $maxValue) * 100;
+        } else {
+            $percentage = 0;
+        }
+        if ($percentage < 80) {
+            return "Вы ответили на все вопросы квиза за <b>{$timeRepresentation}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных.\n\n<i>К сожалению, этого недостаточно, однако крутой стикер-пак ждет вас на стенде Plesk. Спасибо за игру!</i>";
+        }
+        return "Вы ответили на все вопросы квиза за <b>{$timeRepresentation}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных. Отличный результат!\n\n<b>Подходите на стенд Plesk за своим подарком и крутым стикер-паком. Спасибо за игру!</b>";
     }
 
     protected function getOverallValue($conversationItems)
@@ -96,11 +99,37 @@ class Chat
                 }
             }
             if (0 < $value) {
-                // TODO decrease value according spent time
+                $value = $this->decreaseValue($value, $item->answerDate - $item->displayDate);
             }
             $overallValue += $value;
         }
         return $overallValue;
+    }
+
+    protected function getTimeRepresentation($time)
+    {
+        $minutes = floor($time / 60);
+        $seconds = $time - round($minutes * 60);
+        if (59 < $minutes) {
+            return "больше часа?! \xF0\x9F\x98\xA8";
+        }
+        return ($minutes < 10 ? '0' . $minutes : $minutes) . ':' . ($seconds < 10 ? '0' . $seconds : $seconds);
+    }
+
+    protected function decreaseValue($value, $time)
+    {
+        $min = 20;
+        $max = 120;
+        if ($time <= $min) {
+            return $value;
+        }
+        if ($time > $max) {
+            return round($value / 2);
+        }
+        $factor = ($time - $min) / ($max - $min);
+        $decrease = floor($value / 2 * $factor);
+
+        return $value - $decrease;
     }
 
     protected function getTotalMaxValue($conversationItems)
@@ -148,6 +177,22 @@ class Chat
             }
         }
         return $items;
+    }
+
+    protected function getRunsCount($dialogName)
+    {
+        $runIds = [];
+        foreach ($this->storage->get()->conversation as $item) {
+            if (!isset($item->dialogName) || $item->dialogName != $dialogName) {
+                continue;
+            }
+            if (!isset($item->runId)) {
+                continue;
+            }
+            $runIds[] = $item->runId;
+        }
+        $runIds = array_unique($runIds);
+        return sizeof($runIds);
     }
 
     public function goToNextConversationItem()
@@ -224,6 +269,7 @@ class Chat
         Registry::getInstance()->getLog()->info(json_last_error() . ' : ' . json_last_error_msg());
         $data = $this->storage->get();
         foreach ($dialog as $item) {
+            $item->dialogName = $dialogName;
             $item->runId = $runId;
             $item->runDate = $runDate;
             $item->code = $this->generateRandomString(4);
@@ -241,7 +287,7 @@ class Chat
     {
         $butler = new \stdClass();
         $butler->type = "butler";
-        $butler->message = "<b>Вас приветствует Plesk Quiz Bot.</b>\nBuild, Secure and Run your websites on Plesk!\n\nОбращаем внимание, что мы регистрируем прохождение квизов до 12 мая 18:00!\n\nЧтобы начать, пожалуйста, укажите свой email.";
+        $butler->message = "<b>Вас приветствует Plesk Quiz Bot.</b>\nBuild, Secure and Run your websites on Plesk!\n\nОтвечая на вопросы, имейте в виду, что затраченное <b>время имеет значение</b> при финальном подстчете баллов! Обращаем внимание, что мы регистрируем прохождение квизов до 12 мая 18:00! Вы можете проходить каждый квиз по нескольку раз, однако подарки вручаются только по результатам <b>первой попытки</b>. Желаем удачи! \xF0\x9F\x98\x8A\n\nЧтобы начать, пожалуйста, укажите свой email.";
         $butler->current = true;
         $data = $this->storage->get();
         $data->conversation[] = $butler;

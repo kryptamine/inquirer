@@ -2,7 +2,6 @@
 
 namespace Inquirer;
 
-use Inquirer\Entity;
 use Inquirer\Exception;
 use Inquirer\Factory;
 use Inquirer\Bridge;
@@ -42,17 +41,17 @@ class Webhook
         $conversationItem = $chat->getCurrentConversationItem();
         $log->info("Current conversation item '{$conversationItem->code}' with type '{$conversationItem->type}'");
 
-        if ("/start" != $message && "butler" == $conversationItem->type) {
-            $chat->pickUp($message);
-            $email = $chat->getEmail();
-            if (is_null($email)) {
+        if ("butler" == $conversationItem->type) {
+            if (!$chat->pickUp($message)) {
                 $chatBridge->keepConversation($conversationItem);
                 return;
             }
-            $chat->goToNextConversationItem();
+            $conversationItem = $chat->goToNextConversationItem();
+            $chatBridge->keepConversation($conversationItem);
+            return;
         }
 
-        if ("/start" != $message && "dispatcher" == $conversationItem->type) {
+        if ("dispatcher" == $conversationItem->type) {
             $dialogCode = null;
             foreach ($conversationItem->options as $option) {
                 if ($message == $option->code) {
@@ -60,19 +59,20 @@ class Webhook
                     break;
                 }
             }
-            if (!is_null($dialogCode)) {
-                $chat->addDialog($dialogCode);
-            } else {
+            if (is_null($dialogCode)) {
                 $chatBridge->keepConversation($conversationItem);
                 return;
-            };
+            }
+            $chat->addDialog($dialogCode);
+            $this->removeOptions($chatBridge, $conversationItem);
+            $conversationItem = $chat->goToNextConversationItem();
+            $chatBridge->keepConversation($conversationItem);
+            return;
         }
 
-        if ("/start" != $message) {
+        if ("question" == $conversationItem->type) {
             $chat->addAnswer($message);
-            if (isset($conversationItem->options)) {
-                $chatBridge->removeOptions($conversationItem);
-            }
+            $this->removeOptions($chatBridge, $conversationItem);
             $conversationItem = $chat->goToNextConversationItem();
         }
 
@@ -82,6 +82,17 @@ class Webhook
         }
 
         $chatBridge->keepConversation($conversationItem);
+    }
+
+    protected function removeOptions(Bridge\Chat $chatBridge, $conversationItem)
+    {
+        if (isset($conversationItem->options)) {
+            try {
+                $chatBridge->removeOptions($conversationItem);
+            } catch (\Exception $e) {
+                Registry::getInstance()->getLog()->error("Unable to remove options of message {$conversationItem->messageId}");
+            }
+        }
     }
 
     protected function getMessage($data)
@@ -101,18 +112,5 @@ class Webhook
             return $data->callback_query->message->chat->id;
         }
         throw new Exception\WebhookException("Unable to extract chat identity");
-    }
-
-    protected function getQuestion()
-    {
-        return new Entity\Question(
-            'question1',
-            'Choice correct answer!',
-            [
-                new Entity\Option('var1', 'May be yes?', 0),
-                new Entity\Option('var1', 'May be no?', 0),
-                new Entity\Option('var1', 'I don\'t know!', 100),
-            ]
-        );
     }
 }
