@@ -223,7 +223,6 @@ class Chat
             return false;
         }
         $this->addEmail($message);
-        $this->addDispatcher();
         return true;
     }
 
