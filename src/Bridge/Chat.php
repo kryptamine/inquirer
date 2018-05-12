@@ -6,6 +6,7 @@ use Inquirer\Api;
 use Inquirer\Entity;
 use Inquirer\Factory;
 use Inquirer\Registry;
+use Inquirer\Exception;
 
 class Chat
 {
@@ -48,6 +49,7 @@ class Chat
 
     /**
      * @return Entity\Bot
+     * @throws Exception\StorageException
      */
     protected function getBot()
     {

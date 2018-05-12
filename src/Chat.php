@@ -50,6 +50,10 @@ class Chat
                             break;
                     }
                 }
+                if ("question" == $item->type) {
+                    $number = 9 < $item->number ? $item->number : "0{$item->number}";
+                    $item->message = "<b>Вопрос #{$number}</b>: {$item->message}";
+                }
                 return $item;
             }
         }
@@ -76,7 +80,7 @@ class Chat
             $percentage = 0;
         }
         if ($percentage < 80) {
-            return "Вы ответили на все вопросы квиза за <b>{$timeRepresentation}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных.\n\n<i>К сожалению, этого недостаточно, однако, крутой стикерпак ждет вас на стенде Plesk. Спасибо за игру!</i>";
+            return "Вы ответили на все вопросы квиза за <b>{$timeRepresentation}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных.\n\n<i>К сожалению, этого недостаточно, чтобы получить большой подарок, однако мы хотим подарить вам крутой стикерпак! Он ждет вас на стенде Plesk. Спасибо за игру!</i>";
         }
         return "Вы ответили на все вопросы квиза за <b>{$timeRepresentation}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных. Отличный результат!\n\n<b>Подходите на стенд Plesk за своим подарком и крутым стикерпаком. Спасибо за игру!</b>";
     }
@@ -267,7 +271,11 @@ class Chat
         $dialog = json_decode(file_get_contents($this->getDialogStoragePath($dialogName)));
         Registry::getInstance()->getLog()->info(json_last_error() . ' : ' . json_last_error_msg());
         $data = $this->storage->get();
+        $questionNumber = 1;
         foreach ($dialog as $item) {
+            if ("question" == $item->type) {
+                $item->number = $questionNumber++;
+            }
             $item->dialogName = $dialogName;
             $item->runId = $runId;
             $item->runDate = $runDate;
@@ -286,7 +294,7 @@ class Chat
     {
         $butler = new \stdClass();
         $butler->type = "butler";
-        $butler->message = "<b>Вас приветствует Plesk Quiz Bot.</b>\nBuild, Secure and Run your websites on Plesk!\n\nОтвечая на вопросы, имейте в виду, что затраченное <b>время имеет значение</b> при финальном подстчете баллов! Обращаем внимание, что мы регистрируем прохождение квизов до 12 мая 18:00! Вы можете проходить каждый квиз по нескольку раз, однако подарки вручаются только по результатам <b>первой попытки</b>. Желаем удачи! \xF0\x9F\x98\x8A\n\nЧтобы начать, пожалуйста, укажите свой email.";
+        $butler->message = "<b>Вас приветствует Plesk Quiz Bot.</b>\nBuild, Secure and Run your websites on Plesk!\n\nОтвечая на вопросы, имейте в виду, что затраченное <b>время имеет значение</b> при финальном подсчете баллов! Обращаем внимание, что мы регистрируем прохождение квизов сегодня, 12 мая, до 17:00. Вы можете проходить каждый квиз по нескольку раз, однако подарки вручаются только по результатам <b>первой попытки</b>. Желаем удачи! \xF0\x9F\x98\x8A\n\nЧтобы начать, пожалуйста, укажите свой email.";
         $butler->current = true;
         $data = $this->storage->get();
         $data->conversation[] = $butler;
