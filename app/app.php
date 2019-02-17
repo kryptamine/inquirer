@@ -33,6 +33,10 @@ $app->before(function (Request $request) {
     }
 });
 
+$app->get('/debug', function () {
+    return file_get_contents('../debug.log');
+});
+
 $app->post('/bot/register', function(Request $request) use ($app) {
     $botService = new \Inquirer\Service\BotService($app['api']);
     $userName = $request->request->get('userName');
