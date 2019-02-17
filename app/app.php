@@ -38,16 +38,16 @@ $app->get('/debug', function () {
 });
 
 $app->post('/bot/register', function(Request $request) use ($app) {
-    $botService = new \Inquirer\Service\BotService($app['api']);
-    $userName = $request->request->get('userName');
+    $botService = new \Inquirer\Service\BotService($app['api'], $app['botStorage']);
+    $userName = $request->request->get('name');
     $token = $request->request->get('token');
 
     if (!$userName || !$token) {
-        return new Response('Username and token must be set.', 422);
+        return new Response('name and token must be set.', 422);
     }
 
     try {
-        $botService->register($request->get('userName'), $request->get('token'));
+        $botService->register($request->get('name'), $request->get('token'));
 
         return new Response('Bot registered.', 200);
     } catch (\Exception $exception) {

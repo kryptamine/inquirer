@@ -2,13 +2,16 @@
 
 namespace Inquirer\Command\Bot;
 
-use Inquirer\Bridge;
-use Inquirer\Entity;
+use Inquirer\Service\BotService;
 use Knp\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class Register
+ * @package Inquirer\Command\Bot
+ */
 class Register extends Command
 {
     protected function configure()
@@ -17,24 +20,24 @@ class Register extends Command
             ->setName('bot:register')
             ->setDescription('Register a new bot')
             ->setHelp('This command allows you to register a new bot.')
-            ->addArgument('username', InputArgument::REQUIRED, 'The username of the bot.')
+            ->addArgument('name', InputArgument::REQUIRED, 'The name of the bot.')
             ->addArgument('token', InputArgument::REQUIRED, 'The API token of the bot.')
         ;
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $bot = new Entity\Bot($input->getArgument('username'), $input->getArgument('token'));
-
-        $bridge = new Bridge\Bot(
-            $bot,
-            $this->getSilexApplication()['api']
-        );
+        $botService = new BotService($this->getSilexApplication()['api'], $this->getSilexApplication()['botStorage']);
 
         try {
-            $bridge->register();
+            $botService->register($input->getArgument('username'), $input->getArgument('token'));
         } catch (\Exception $e) {
-            $output->writeln("Unable to register bot '{$bot->getUsername()}': {$e->getMessage()}");
+            $output->writeln("Unable to register bot '{$input->getArgument('username')}': {$e->getMessage()}");
         }
     }
 }

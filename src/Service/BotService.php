@@ -3,9 +3,11 @@
 namespace Inquirer\Service;
 
 use Inquirer\Api;
-use Inquirer\Entity\Bot;
+use Inquirer\Factory\Bot;
+use Inquirer\Entity\Bot as BotEntity;
 use Inquirer\Bridge\Bot as Bridge;
 use Inquirer\Exception\Exception;
+use Inquirer\EntityStorage;
 
 /**
  * Class BotService
@@ -19,32 +21,39 @@ class BotService
     private $api;
 
     /**
+     * @var EntityStorage
+     */
+    private $storage;
+
+    /**
      * BotService constructor.
      * @param Api $api
+     * @param EntityStorage $storage
      */
-    public function __construct(Api $api)
+    public function __construct(Api $api, EntityStorage $storage)
     {
         $this->api = $api;
+        $this->storage = $storage;
     }
 
     /**
-     * @param string $userName
+     * @param string $name
      * @param string $token
      * @throws Exception
      */
-    public function register(string $userName, string $token)
+    public function register(string $name, string $token)
     {
-        $bot = new Bot($userName, $token);
-
+        $botFactory = new Bot($this->storage);
         $bridge = new Bridge(
-            new Bot($userName, $token),
+            new BotEntity($name, $token),
             $this->api
         );
 
         try {
             $bridge->register();
+            $botFactory->create($name, $token);
         } catch (\Exception $e) {
-            throw new Exception("Unable to register bot '{$bot->getUsername()}': {$e->getMessage()}");
+            throw new Exception("Unable to register bot '{$name}': {$e->getMessage()}");
         }
     }
 }
