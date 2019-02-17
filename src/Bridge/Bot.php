@@ -7,7 +7,7 @@ use Inquirer\Entity;
 
 class Bot
 {
-    const BASE_WEBHOOK_URL = 'http://68.183.162.198:4000/webhook';
+    const BASE_WEBHOOK_URL = 'https://plesk-quizz-bot.herokuapp.com/webhook';
 
     /** @var Entity\Bot */
     private $bot;
