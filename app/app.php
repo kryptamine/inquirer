@@ -5,6 +5,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Knp\Provider\ConsoleServiceProvider;
 use Inquirer\Command;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 $app = new Silex\Application();
 
@@ -23,6 +24,32 @@ $app['botStorage'] = function () use ($baseStoragePath) {
 $app['api'] = function () {
     return new \Inquirer\Api();
 };
+
+$app->before(function (Request $request) {
+    if (strpos($request->headers->get('Content-Type'), 'application/json') === 0) {
+        $data = json_decode($request->getContent(), true);
+
+        $request->request->replace(is_array($data) ? $data : []);
+    }
+});
+
+$app->post('/bot/register', function(Request $request) use ($app) {
+    $botService = new \Inquirer\Service\BotService($app['api']);
+    $userName = $request->request->get('userName');
+    $token = $request->request->get('token');
+
+    if (!$userName || !$token) {
+        return new Response('Username and token must be set.', 422);
+    }
+
+    try {
+        $botService->register($request->get('userName'), $request->get('token'));
+
+        return new Response('Bot registered.', 200);
+    } catch (\Exception $exception) {
+        return new Response($exception->getMessage(), 500);
+    }
+});
 
 $app->match('/webhook/{botUsername}', function(Request $request, $botUsername) {
     $webhook = new \Inquirer\Webhook();
