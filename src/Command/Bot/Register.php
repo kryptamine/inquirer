@@ -32,7 +32,7 @@ class Register extends Command
         );
 
         try {
-            $bridge->register($bot);
+            $bridge->register();
         } catch (\Exception $e) {
             $output->writeln("Unable to register bot '{$bot->getUsername()}': {$e->getMessage()}");
         }
