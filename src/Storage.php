@@ -9,9 +9,18 @@ class Storage
     private $path;
     private $data;
 
+    /**
+     * Storage constructor.
+     * @param $path
+     * @throws \Exception
+     */
     public function __construct($path)
     {
         $this->path = $path;
+
+        if (!file_exists($path)) {
+            throw new \Exception("failed to open storage path $path");
+        }
     }
 
     /**
@@ -89,9 +98,6 @@ class Storage
      */
     private function getData()
     {
-        if (!file_exists($this->path)) {
-            return new \stdClass();
-        }
         $rawData = file_get_contents($this->path);
         if (false === $rawData) {
             throw new StorageException("Unable to get data from storage at '{$this->path}'");
