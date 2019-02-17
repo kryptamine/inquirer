@@ -1,1 +1,1 @@
-app: vendor/bin/heroku-php-apache2 httpdocs/
+web: vendor/bin/heroku-php-apache2 httpdocs/
