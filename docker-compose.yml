@@ -1,0 +1,32 @@
+version: '3'
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: docker/app.docker
+    expose:
+      - 9000
+    volumes:
+      - ./:/var/www/app:cached
+    networks:
+      - app-network
+  nginx:
+    build:
+      context: ./
+      dockerfile: docker/nginx.docker
+    image: nginx:alpine
+    volumes:
+      - ./:/var/www/app:cached
+      - ./docker/configs/app.conf:/etc/nginx/conf.d/app.conf:cached
+    ports:
+      - 4000:4000
+    restart: always
+    networks:
+      - app-network
+    depends_on:
+      - app
