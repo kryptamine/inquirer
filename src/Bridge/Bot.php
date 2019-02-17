@@ -15,7 +15,7 @@ class Bot
     /** @var Api */
     private $api;
 
-    public function __construct(Bot $bot, Api $api)
+    public function __construct(Entity\Bot $bot, Api $api)
     {
         $this->bot = $bot;
         $this->api = $api;

@@ -27,7 +27,7 @@ class Register extends Command
         $bot = new Entity\Bot($input->getArgument('username'), $input->getArgument('token'));
 
         $bridge = new Bridge\Bot(
-            $this->getSilexApplication()['botStorage'],
+            $bot,
             $this->getSilexApplication()['api']
         );
 
