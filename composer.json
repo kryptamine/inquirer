@@ -5,6 +5,9 @@
         "guzzlehttp/guzzle": "^6.3",
         "monolog/monolog": "^1.23"
     },
+    "require-dev": {
+        "heroku/heroku-buildpack-php": "*"
+    },
     "autoload": {
         "psr-4": {"Inquirer\\": "src/"}
     }
