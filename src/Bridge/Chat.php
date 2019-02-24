@@ -7,25 +7,37 @@ use Inquirer\Entity;
 use Inquirer\Factory;
 use Inquirer\Registry;
 use Inquirer\Exception;
+use Inquirer\Entity\ConversationItem;
 
+/**
+ * Class Chat
+ * @package Inquirer\Bridge
+ */
 class Chat
 {
     private $chat;
     private $api;
 
+    /**
+     * Chat constructor.
+     * @param \Inquirer\Chat $chat
+     * @param Api $api
+     */
     public function __construct(\Inquirer\Chat $chat, Api $api)
     {
         $this->chat = $chat;
         $this->api = $api;
     }
 
-    public function keepConversation($conversationItem)
+    /**
+     * @param ConversationItem $conversationItem
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     */
+    public function keepConversation(ConversationItem $conversationItem)
     {
         $messageId = $this->api->sendMessage(
-            $this->getBot()->getToken(),
             $this->chat->getId(),
-            $conversationItem->message,
-            isset($conversationItem->options) ? $conversationItem->options : []
+            $conversationItem
         );
         $this->chat->addMessageId($messageId);
     }
@@ -33,7 +45,6 @@ class Chat
     public function removeOptions($conversationItem)
     {
         $this->api->editMessageReplyMarkup(
-            $this->getBot()->getToken(),
             $this->chat->getId(),
             $conversationItem->messageId
         );
@@ -41,10 +52,7 @@ class Chat
 
     public function confirmAnswer($callbackId)
     {
-        $this->api->answerCallbackQuery(
-            $this->getBot()->getToken(),
-            $callbackId
-        );
+        $this->api->answerCallbackQuery($callbackId);
     }
 
     /**

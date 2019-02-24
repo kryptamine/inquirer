@@ -2,6 +2,8 @@
 
 namespace Inquirer;
 
+use Inquirer\Entity\ConversationItem;
+use Inquirer\Entity\Option;
 use Inquirer\Factory;
 
 class Chat
@@ -35,7 +37,11 @@ class Chat
         return $this->storage->get()->botUsername;
     }
 
-    public function getCurrentConversationItem()
+    /**
+     * @return ConversationItem
+     * @throws Exception\StorageException
+     */
+    public function getCurrentConversationItem(): ConversationItem
     {
         foreach ($this->storage->get()->conversation as $item) {
             if (isset($item->current) && $item->current) {
@@ -54,9 +60,16 @@ class Chat
                     $number = 9 < $item->number ? $item->number : "0{$item->number}";
                     $item->message = "<b>Вопрос #{$number}</b>: {$item->message}";
                 }
-                return $item;
+
+                return new ConversationItem(
+                   $item->options ? Option::fill($item->options): [],
+                   $item->type,
+                   $item->message,
+                   (bool)$item->isMulti
+                );
             }
         }
+
         return null;
     }
 
@@ -199,7 +212,11 @@ class Chat
         return sizeof($runIds);
     }
 
-    public function goToNextConversationItem()
+    /**
+     * @return ConversationItem
+     * @throws Exception\StorageException
+     */
+    public function goToNextConversationItem(): ConversationItem
     {
         $data = $this->storage->get();
         $length = sizeof($data->conversation);

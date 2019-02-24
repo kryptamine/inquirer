@@ -2,77 +2,68 @@
 
 namespace Inquirer;
 
-use GuzzleHttp;
+use Inquirer\Entity\ConversationItem;
+use Longman\TelegramBot\Request;
 
 class Api
 {
-    private $httpClient;
-
-    public function answerCallbackQuery($token, $callbackId)
+    public function answerCallbackQuery($callbackId)
     {
-        $this->getHttpClient()->post("/bot{$token}/answerCallbackQuery", [
-            'json' => [
-                'callback_query_id' => $callbackId,
-                'text' => '',
-            ],
+        Request::answerCallbackQuery([
+            'callback_query_id' => $callbackId,
+            'text' => '',
         ]);
     }
 
-    public function sendMessage($token, $chatId, $message, $options = [])
+    /**
+     * @param $chatId
+     * @param ConversationItem $conversationItem
+     * @return mixed
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     */
+    public function sendMessage($chatId, ConversationItem $conversationItem)
     {
         $json = [
             'chat_id' => $chatId,
-            'text' => $message,
+            'text' => $conversationItem->getMessage(),
             'parse_mode' => 'HTML',
         ];
-        if (!empty($options)) {
+        if ($conversationItem->hasOptions()) {
             $lines = [];
-            foreach ($options as $option) {
+            foreach ($conversationItem->getOptions() as $option) {
                 $buttons = [];
                 $buttons[] = [
-                    'text' => $option->message,
-                    'callback_data' => $option->code,
+                    'text' => $option->getMessage(),
+                    'callback_data' => $option->getKey(),
                 ];
                 $lines[] = $buttons;
+            }
+
+            if ($conversationItem->isMulti()) {
+                $lines[] = [[
+                    'text' => 'Submit',
+                    'callback_data' => 'submit',
+                ]];
             }
             $json['reply_markup'] = [
                 'inline_keyboard' => $lines,
                 'resize_keyboard' => true,
             ];
         }
-        $response = $this->getHttpClient()->post("/bot{$token}/sendMessage", [
-            'json' => $json,
+
+        $response = Request::sendMessage($json);
+
+        return $response->getResult()->message_id;
+    }
+
+    public function editMessageReplyMarkup($chatId, $messageId)
+    {
+        Request::editMessageReplyMarkup([
+            'chat_id' => $chatId,
+            'message_id' => $messageId,
+            'reply_markup' => [
+                'inline_keyboard' => [],
+            ]
         ]);
-        $data = json_decode($response->getBody());
-        return $data->result->message_id;
-    }
-
-    public function editMessageReplyMarkup($token, $chatId, $messageId)
-    {
-        $this->getHttpClient()->post("/bot{$token}/editMessageReplyMarkup", [
-            'json' => [
-                'chat_id' => $chatId,
-                'message_id' => $messageId,
-                'reply_markup' => [
-                    'inline_keyboard' => [],
-                ]
-            ],
-        ]);
-    }
-
-    public function registerWebhook($token, $webhookUrl)
-    {
-        $this->getHttpClient()->get("/bot{$token}/setWebhook?url={$webhookUrl}");
-    }
-
-    protected function getHttpClient()
-    {
-        if (is_null($this->httpClient)) {
-            $this->httpClient = new GuzzleHttp\Client([
-                'base_uri' => 'https://api.telegram.org',
-                'timeout' => 2,
-            ]);
-        }
-        return $this->httpClient;
     }
 }

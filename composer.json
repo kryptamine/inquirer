@@ -1,10 +1,10 @@
 {
     "require": {
         "silex/silex": "^2.0",
-        "knplabs/console-service-provider": "^2.2",
-        "guzzlehttp/guzzle": "^6.3",
         "monolog/monolog": "^1.23",
-        "php": ">=7.0"
+        "php": ">=7.0",
+        "longman/telegram-bot": "^0.55.1",
+        "vlucas/phpdotenv": "^3.3"
     },
     "require-dev": {
         "heroku/heroku-buildpack-php": "*"

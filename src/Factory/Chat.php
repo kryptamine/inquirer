@@ -14,12 +14,11 @@ class Chat
         $this->baseStoragePath = $baseStoragePath;
     }
 
-    public function create($chatId, $botUsername)
+    public function create($chatId)
     {
         $storagePath = $this->getChatStoragePath($chatId);
         $storage = new Storage($storagePath);
         $data = new \stdClass();
-        $data->botUsername = $botUsername;
         $data->conversation = [];
         $storage->set($data);
         $chat = new Inquirer\Chat($chatId, $storage);
