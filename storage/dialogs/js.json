@@ -2,6 +2,7 @@
 	{
 		"type": "question",
 		"message": "What is a valid method of the console object?",
+		"isMulti": "true",
 		"options": [
 			{
 				"message": "log",

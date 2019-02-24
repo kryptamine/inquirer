@@ -14,7 +14,7 @@ class Question implements Entity
     /** @var Option */
     private $answer = null;
 
-    public function __construct($code, $type, $message, $options = [], $answer = null)
+    public function __construct(string $code, string $type, string $message, array $options = [], $answer = null)
     {
         $this->code = $code;
         $this->type = $type;
@@ -43,12 +43,17 @@ class Question implements Entity
         return $this->code;
     }
 
-    public function toArray()
+    /**
+     * @return array
+     */
+    public function toArray(): array
     {
         $optionsArray = [];
+
         foreach ($this->options as $option) {
             $optionsArray[] = $option->toArray();
         }
+
         return [
             'code' => $this->code,
             'message' => $this->message,

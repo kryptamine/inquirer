@@ -8,7 +8,13 @@ use Inquirer\Bridge;
 
 class Webhook
 {
-    public function process($botUsername, $data)
+    /**
+     * @param $data
+     * @throws Exception\StorageException
+     * @throws Exception\WebhookException
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     */
+    public function process($data)
     {
         $log = Registry::getInstance()->getLog();
         $app = Registry::getInstance()->getApp();
@@ -19,10 +25,10 @@ class Webhook
         $chatFactory = new Factory\Chat($app['baseStoragePath']);
         $chat = $chatFactory->findById($chatId);
         if (is_null($chat)) {
-            $log->info("Create new chat '{$chatId}' with bot '{$botUsername}'");
-            $chat = $chatFactory->create($chatId, $botUsername);
+            $log->info("Create new chat '{$chatId}''");
+            $chat = $chatFactory->create($chatId);
         } else {
-            $log->info("Use existing chat '{$chatId}' with bot '{$botUsername}'");
+            $log->info("Use existing chat '{$chatId}'");
         }
 
         $chatBridge = new Bridge\Chat($chat, $app['api']);
@@ -39,9 +45,9 @@ class Webhook
         $log->info("Process message '{$message}'");
 
         $conversationItem = $chat->getCurrentConversationItem();
-        $log->info("Current conversation item '{$conversationItem->code}' with type '{$conversationItem->type}'");
 
-        if ("butler" == $conversationItem->type) {
+
+        if ("butler" == $conversationItem->getType()) {
             if (!$chat->pickUp($message)) {
                 $chatBridge->keepConversation($conversationItem);
                 return;
@@ -51,10 +57,10 @@ class Webhook
             return;
         }
 
-        if ("dispatcher" == $conversationItem->type) {
+        if ("dispatcher" == $conversationItem->getType()) {
             $dialogCode = null;
-            foreach ($conversationItem->options as $option) {
-                if ($message == $option->code) {
+            foreach ($conversationItem->getOptions() as $option) {
+                if ($message == $option->getKey()) {
                     $dialogCode = $message;
                     break;
                 }
@@ -70,13 +76,13 @@ class Webhook
             return;
         }
 
-        if ("question" == $conversationItem->type) {
+        if ("question" == $conversationItem->getType()) {
             $chat->addAnswer($message);
             $this->removeOptions($chatBridge, $conversationItem);
             $conversationItem = $chat->goToNextConversationItem();
         }
 
-        while ("info" == $conversationItem->type) {
+        while ("info" == $conversationItem->getType()) {
             $chatBridge->keepConversation($conversationItem);
             $conversationItem = $chat->goToNextConversationItem();
         }
