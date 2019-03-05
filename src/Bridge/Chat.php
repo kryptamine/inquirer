@@ -42,11 +42,14 @@ class Chat
         $this->chat->addMessageId($messageId);
     }
 
-    public function removeOptions($conversationItem)
+    /**
+     * @param string $messageId
+     */
+    public function removeOptions(string $messageId)
     {
         $this->api->editMessageReplyMarkup(
             $this->chat->getId(),
-            $conversationItem->messageId
+            $messageId
         );
     }
 

@@ -2,6 +2,7 @@
 
 namespace Inquirer;
 
+use Inquirer\Entity\ConversationItem;
 use Inquirer\Exception;
 use Inquirer\Factory;
 use Inquirer\Bridge;
@@ -90,13 +91,19 @@ class Webhook
         $chatBridge->keepConversation($conversationItem);
     }
 
-    protected function removeOptions(Bridge\Chat $chatBridge, $conversationItem)
+    /**
+     * @param Bridge\Chat $chatBridge
+     * @param ConversationItem $conversationItem
+     */
+    protected function removeOptions(Bridge\Chat $chatBridge, ConversationItem $conversationItem)
     {
-        if (isset($conversationItem->options)) {
+        if ($conversationItem->hasOptions()) {
             try {
-                $chatBridge->removeOptions($conversationItem);
+                $chatBridge->removeOptions($conversationItem->getKey());
             } catch (\Exception $e) {
-                Registry::getInstance()->getLog()->error("Unable to remove options of message {$conversationItem->messageId}");
+                Registry::getInstance()->getLog()->error(
+                    "Unable to remove options of message {$conversationItem->getKey()}"
+                );
             }
         }
     }

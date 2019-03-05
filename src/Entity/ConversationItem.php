@@ -24,6 +24,11 @@ class ConversationItem implements Entity
     private $message;
 
     /**
+     * @var string
+     */
+    private $messageId;
+
+    /**
      * @var bool
      */
     private $isMulti;
@@ -33,19 +38,24 @@ class ConversationItem implements Entity
      * @param array $options
      * @param string $type
      * @param string $message
+     * @param string $messageId
      * @param bool $isMulti
      */
-    public function __construct(array $options, string $type, string $message, bool $isMulti)
+    public function __construct(array $options, string $type, string $message, string $messageId, bool $isMulti)
     {
         $this->options = $options;
         $this->type = $type;
         $this->message = $message;
+        $this->messageId = $messageId;
         $this->isMulti = $isMulti;
     }
 
+    /**
+     * @return string
+     */
     public function getKey()
     {
-        // TODO: Implement getKey() method.
+        return $this->messageId;
     }
 
     /**
@@ -62,6 +72,14 @@ class ConversationItem implements Entity
     public function getMessage(): string
     {
         return $this->message;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessageId(): string
+    {
+        return $this->messageId;
     }
 
     /**
