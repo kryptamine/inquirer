@@ -29,25 +29,18 @@ class ConversationItem implements Entity
     private $messageId;
 
     /**
-     * @var bool
-     */
-    private $isMulti;
-
-    /**
      * ConversationItem constructor.
      * @param array $options
      * @param string $type
      * @param string $message
      * @param string $messageId
-     * @param bool $isMulti
      */
-    public function __construct(array $options, string $type, string $message, string $messageId, bool $isMulti)
+    public function __construct(array $options, string $type, string $message, string $messageId)
     {
         $this->options = $options;
         $this->type = $type;
         $this->message = $message;
         $this->messageId = $messageId;
-        $this->isMulti = $isMulti;
     }
 
     /**
@@ -56,14 +49,6 @@ class ConversationItem implements Entity
     public function getKey()
     {
         return $this->messageId;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isMulti(): bool
-    {
-        return $this->isMulti;
     }
 
     /**

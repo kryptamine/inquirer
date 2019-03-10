@@ -39,12 +39,6 @@ class Api
                 $lines[] = $buttons;
             }
 
-            if ($conversationItem->isMulti()) {
-                $lines[] = [[
-                    'text' => 'Submit',
-                    'callback_data' => 'submit',
-                ]];
-            }
             $json['reply_markup'] = [
                 'inline_keyboard' => $lines,
                 'resize_keyboard' => true,

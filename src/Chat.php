@@ -65,8 +65,7 @@ class Chat
                    $item->options ? Option::fill($item->options): [],
                    $item->type,
                    $item->message,
-                   $item->messageId ?? '',
-                   (bool)$item->isMulti
+                   $item->messageId ?? ''
                 );
             }
         }
