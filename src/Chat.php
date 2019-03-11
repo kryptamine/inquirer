@@ -92,7 +92,7 @@ class Chat
         } else {
             $percentage = 0;
         }
-        if ($percentage < 80) {
+        if ($percentage < 75) {
             return "Вы ответили на все вопросы квиза за <b>{$timeRepresentation}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных.\n\n<i>К сожалению, этого недостаточно, чтобы получить большой подарок, однако мы хотим подарить вам крутой стикерпак! Он ждет вас на стенде Plesk. Спасибо за игру!</i>";
         }
         return "Вы ответили на все вопросы квиза за <b>{$timeRepresentation}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных. Отличный результат!\n\n<b>Подходите на стенд Plesk за своим подарком и крутым стикерпаком. Спасибо за игру!</b>";
@@ -135,16 +135,16 @@ class Chat
 
     protected function decreaseValue($value, $time)
     {
-        $min = 20;
-        $max = 120;
+        $min = 30;
+        $max = 90;
         if ($time <= $min) {
             return $value;
         }
         if ($time > $max) {
-            return round($value / 2);
+            return round($value / 3);
         }
         $factor = ($time - $min) / ($max - $min);
-        $decrease = floor($value / 2 * $factor);
+        $decrease = floor($value / 3 * $factor);
 
         return $value - $decrease;
     }
