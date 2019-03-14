@@ -77,28 +77,20 @@ class Chat
     {
         $runItems = $this->getConversationItemsByRunId($runId);
         $maxValue = $this->getTotalMaxValue($runItems);
-        $value = $this->getOverallValue($runItems);
+        $correctAnswersCount = 0;
+        $value = $this->getOverallValue($runItems, $correctAnswersCount);
         $time = $this->getOverallTime($runItems);
         $runsCount = $this->getRunsCount($dialogName);
 
         $timeRepresentation = $this->getTimeRepresentation($time);
 
         if (1 < $runsCount) {
-            return "Попытка <b>#{$runsCount}</b>: вы набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных за <b>{$timeRepresentation}</b>.";
+            return "Попытка <b>#{$runsCount}</b>: вы набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных за <b>{$timeRepresentation}</b>. Количество ответов за которые вы получили баллы: <b>{$correctAnswersCount}</b>.";
         }
-
-        if ($maxValue > 0) {
-            $percentage = ($value / $maxValue) * 100;
-        } else {
-            $percentage = 0;
-        }
-        if ($percentage < 75) {
-            return "Вы ответили на все вопросы квиза за <b>{$timeRepresentation}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных.\n\n<i>К сожалению, этого недостаточно, чтобы получить большой подарок, однако мы хотим подарить вам крутой стикерпак! Он ждет вас на стенде Plesk. Спасибо за игру!</i>";
-        }
-        return "Вы ответили на все вопросы квиза за <b>{$timeRepresentation}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных. Отличный результат!\n\n<b>Подходите на стенд Plesk за своим подарком и крутым стикерпаком. Спасибо за игру!</b>";
+        return "Вы ответили на все вопросы квиза за <b>{$timeRepresentation}</b> и набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных. . Количество ответов за которые вы получили баллы: <b>{$correctAnswersCount}</b>. <b>Спасибо за игру!</b> Напоминаем, что розыгрыш призов победителям состоится согласно нашему расписанию на стенде.";
     }
 
-    protected function getOverallValue($conversationItems)
+    protected function getOverallValue($conversationItems, &$correctAnswersCount)
     {
         $overallValue = 0;
         foreach ($conversationItems as $item) {
@@ -116,6 +108,7 @@ class Chat
                 }
             }
             if (0 < $value) {
+                $correctAnswersCount++;
                 $value = $this->decreaseValue($value, $item->answerDate - $item->displayDate);
             }
             $overallValue += $value;
@@ -141,10 +134,10 @@ class Chat
             return $value;
         }
         if ($time > $max) {
-            return round($value / 3);
+            return round($value / 2);
         }
         $factor = ($time - $min) / ($max - $min);
-        $decrease = floor($value / 3 * $factor);
+        $decrease = floor($value / 2 * $factor);
 
         return $value - $decrease;
     }
@@ -311,7 +304,7 @@ class Chat
     {
         $butler = new \stdClass();
         $butler->type = "butler";
-        $butler->message = "<b>Вас приветствует Plesk Quiz Bot.</b>\nBuild, Secure and Run your websites on Plesk!\n\nОтвечая на вопросы, имейте в виду, что затраченное <b>время имеет значение</b> при финальном подсчете баллов! Обращаем внимание, что мы регистрируем прохождение квизов сегодня, 12 мая, до 17:00. Вы можете проходить каждый квиз по нескольку раз, однако подарки вручаются только по результатам <b>первой попытки</b>. Желаем удачи! \xF0\x9F\x98\x8A\n\nЧтобы начать, пожалуйста, укажите свой email.";
+        $butler->message = "<b>Вас приветствует Plesk Quiz Bot.</b>\nBuild, Secure and Run your websites on Plesk!\n\nОтвечая на вопросы, имейте в виду, что затраченное на каждый вопрос <b>время имеет значение</b> при финальном подсчете баллов, поэтому желательно не прерываться при прохождении! Обращаем внимание, что мы регистрируем прохождение квизов до 13:00 31 марта. Вы можете проходить каждый квиз по нескольку раз, однако подарки вручаются только по результатам <b>первой попытки</b>. Желаем удачи! \xF0\x9F\x98\x8A\n\nЧтобы начать, пожалуйста, укажите свой email.";
         $butler->current = true;
         $data = $this->storage->get();
         $data->conversation[] = $butler;
