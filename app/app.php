@@ -24,6 +24,17 @@ $app->get('/debug', function () {
     return file_get_contents('../debug.log');
 });
 
+$app->get('/top', function (Request $request) use ($app) {
+    $calculator = new \Inquirer\Services\StatisticCalculator(__DIR__.'/../storage/chats');
+
+    if ($filterBy = $request->get('filterBy')) {
+        $calculator->filterBy($filterBy);
+    }
+
+    return $app->json($calculator->collect());
+});
+
+
 try {
     // Create Telegram API object
     $telegram = new Longman\TelegramBot\Telegram(getenv('API_KEY'), getenv('BOT_USERNAME'));
