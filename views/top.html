@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Quiz Them All</title>
+    <link rel="stylesheet" href="/ui-library/plesk-ui-library.css" />
+</head>
+<body>
+<div id="root"></div>
+<script>
+    var __INITIAL_STATE__ = {
+        participants: {{ participants|json_encode|raw }},
+    };
+</script>
+<script type="text/javascript" src="/ui-library/index.js"></script>
+</body>
+</html>

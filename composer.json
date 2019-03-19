@@ -4,7 +4,8 @@
         "monolog/monolog": "^1.23",
         "php": ">=7.0",
         "longman/telegram-bot": "^0.55.1",
-        "vlucas/phpdotenv": "^3.3"
+        "vlucas/phpdotenv": "^3.3",
+        "symfony/twig-bridge": "^4.2"
     },
     "require-dev": {
         "heroku/heroku-buildpack-php": "*"

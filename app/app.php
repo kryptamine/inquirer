@@ -10,9 +10,13 @@ $app = new Silex\Application();
 $dotEnv = Dotenv\Dotenv::create('../');
 $dotEnv->load();
 
-$app->register(new Silex\Provider\MonologServiceProvider(), array(
+$app->register(new Silex\Provider\MonologServiceProvider(), [
     'monolog.logfile' => __DIR__ . '/../debug.log',
-));
+]);
+
+$app->register(new Silex\Provider\TwigServiceProvider(), [
+    'twig.path' => __DIR__.'/../views',
+]);
 
 $app['baseStoragePath'] = __DIR__ . '/../storage';
 
@@ -26,12 +30,14 @@ $app->get('/debug', function () {
 
 $app->get('/top', function (Request $request) use ($app) {
     $calculator = new \Inquirer\Services\StatisticCalculator(__DIR__.'/../storage/chats');
-
     if ($filterBy = $request->get('filterBy')) {
         $calculator->filterBy($filterBy);
     }
+    if ($request->get('json')) {
+        return $app->json($calculator->collect());
+    }
+    return $app['twig']->render('top.html', ['participants' => $calculator->collect()]);
 
-    return $app->json($calculator->collect());
 });
 
 
