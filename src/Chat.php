@@ -181,7 +181,7 @@ class Chat
 
     protected function decreaseValue($value, $time)
     {
-        $min = 30;
+        $min = 45;
         $max = 90;
         if ($time <= $min) {
             return $value;
