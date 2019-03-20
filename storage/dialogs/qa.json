@@ -1,0 +1,37 @@
+[
+  {
+    "type": "question",
+    "message": "Как дела?",
+    "options": [
+      {
+        "message": "Хреново...",
+        "value": 0
+      }, {
+        "message": "Бывает и лучше",
+        "value": 40
+      }, {
+        "message": "Неплохо",
+        "value": 80
+      }, {
+        "message": "Офигенно!",
+        "value": 100
+      }
+    ]
+  }, {
+  "type": "question",
+  "message": "Ну как оно?",
+  "options": [
+    {
+      "message": "Не спрашивай",
+      "value": 0
+    }, {
+      "message": "Ничего так!",
+      "value": 50
+    }
+  ]
+}, {
+  "type": "info",
+  "action": "summarize",
+  "message": ""
+}
+]
