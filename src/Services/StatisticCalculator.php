@@ -71,7 +71,12 @@ class StatisticCalculator
 
         foreach ($data as $chat) {
             if (isset($chat['results'])) {
-                $result[$chat['email']] = $chat['results'];
+                $result[] = array_merge(
+                    [
+                        'email' => $chat['email'],
+                    ],
+                    $chat['results']
+                );
             }
         }
 

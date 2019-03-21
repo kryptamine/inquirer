@@ -14,6 +14,7 @@ class Dialog
         return [
             new Entity\Dialog('php', 'PHP Quiz'),
             new Entity\Dialog('js', 'JavaScript Quiz'),
+            new Entity\Dialog('qa', 'QA Quiz'),
             //new Entity\Dialog('test', 'Test Quiz'),
         ];
     }

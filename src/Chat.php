@@ -22,6 +22,16 @@ class Chat
      */
     private $totalScore = 0;
 
+    /**
+     * @var float
+     */
+    private $time = 0.0;
+
+    /**
+     * @var int
+     */
+    private $correctAnswerCount = 0;
+
     public function __construct($id, $storage)
     {
         $this->id = $id;
@@ -93,12 +103,22 @@ class Chat
         $storage = $this->storage->get();
 
         if (!isset($storage->results)) {
-            $storage->results = [$dialogName => $this->totalScore];
+            $storage->results = [
+                $dialogName => [
+                    'score' => $this->totalScore,
+                    'time' => $this->time,
+                    'correctAnswerCount' => $this->correctAnswerCount
+                ],
+            ];
             return;
         }
 
         if (!isset($storage->results->$dialogName)) {
-            $storage->results->$dialogName = $this->totalScore;
+            $storage->results->$dialogName = [
+                'score' => $this->totalScore,
+                'time' => $this->time,
+                'correctAnswerCount' => $this->correctAnswerCount
+            ];
         }
     }
 
@@ -114,6 +134,8 @@ class Chat
         $timeRepresentation = $this->getTimeRepresentation($time);
 
         $this->totalScore = $value;
+        $this->time = $timeRepresentation;
+        $this->correctAnswerCount = $correctAnswersCount;
 
         if (1 < $runsCount) {
             return "Попытка <b>#{$runsCount}</b>: вы набрали <b>{$value}</b> баллов из <b>{$maxValue}</b> возможных за <b>{$timeRepresentation}</b>. Количество ответов за которые вы получили баллы: <b>{$correctAnswersCount}</b>.";
@@ -159,7 +181,7 @@ class Chat
 
     protected function decreaseValue($value, $time)
     {
-        $min = 30;
+        $min = 45;
         $max = 90;
         if ($time <= $min) {
             return $value;
