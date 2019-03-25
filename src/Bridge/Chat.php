@@ -5,6 +5,7 @@ namespace Inquirer\Bridge;
 use Inquirer\Api;
 use Inquirer\Registry;
 use Inquirer\Entity\ConversationItem;
+use Longman\TelegramBot\Request;
 
 /**
  * Class Chat
@@ -53,6 +54,17 @@ class Chat
     public function confirmAnswer($callbackId)
     {
         $this->api->answerCallbackQuery($callbackId);
+    }
+
+    /**
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     */
+    public function sendQuizClosedStub()
+    {
+        Request::sendMessage([
+            'chat_id' => $this->chat->getId(),
+            'text' => 'Квиз закончен. Ответы больше не принимаются, спасибо за участие:)'
+        ]);
     }
 
     protected function getDialogStoragePath($dialogName)

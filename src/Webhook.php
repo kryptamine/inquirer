@@ -47,6 +47,11 @@ class Webhook
 
         $conversationItem = $chat->getCurrentConversationItem();
 
+        if (getenv('ENABLED') !== 'true') {
+            $chatBridge->sendQuizClosedStub();
+            return;
+        }
+
 
         if ("butler" == $conversationItem->getType()) {
             if (!$chat->pickUp($message)) {
