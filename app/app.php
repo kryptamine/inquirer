@@ -29,7 +29,10 @@ $app->get('/debug', function () {
 });
 
 $app->get('/top', function (Request $request) use ($app) {
-    $calculator = new \Inquirer\Services\StatisticCalculator(__DIR__.'/../storage/chats');
+    $calculator = new \Inquirer\Services\StatisticCalculator(
+        __DIR__.'/../storage/chats',
+        (bool)$request->get('hide', false)
+    );
     if ($filterBy = $request->get('filterBy')) {
         $calculator->filterBy($filterBy);
     }

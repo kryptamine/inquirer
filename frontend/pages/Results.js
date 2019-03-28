@@ -30,14 +30,9 @@ class Results extends Component {
                 return;
             }
             const { score, time, correctAnswerCount } = participant[type];
-            const emailParts = participant.email.split('@');
-            if (emailParts.length !== 2) {
-                return;
-            }
-            const email = `${emailParts[0]}***`;
             filteredItems.push({
                 key:`participant_${index}`,
-                email: email,
+                email: participant.email,
                 score,
                 time,
                 correctAnswerCount,
