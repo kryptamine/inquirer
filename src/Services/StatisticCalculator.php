@@ -19,16 +19,22 @@ class StatisticCalculator
     private $filterBy;
 
     /**
+     * @var bool
+     */
+    private $hideEmails = false;
+
+    /**
      * StatisticCalculator constructor.
      * @param string $path
+     * @param bool $hideEmails
      * @throws \Exception
      */
-    public function __construct(string $path)
+    public function __construct(string $path, bool $hideEmails = false)
     {
         if (!is_dir($path)) {
             throw new \Exception("directory: '{$path}' does not exist");
         }
-
+        $this->hideEmails = $hideEmails;
         $this->path = $path;
     }
 
@@ -70,14 +76,24 @@ class StatisticCalculator
         $data = $this->getChats();
 
         foreach ($data as $chat) {
-            if (isset($chat['results'])) {
-                $result[] = array_merge(
-                    [
-                        'email' => $chat['email'],
-                    ],
-                    $chat['results']
-                );
+            if (!isset($chat['results'])) {
+                continue;
             }
+            $email = $chat['email'];
+            if ($this->hideEmails) {
+                $emailParts = explode("@", $email);
+                if (count($emailParts) != 2) {
+                    continue;
+                }
+                $email = "{$emailParts[0]}@***";
+
+            }
+            $result[] = array_merge(
+                [
+                    'email' => $email,
+                ],
+                $chat['results']
+            );
         }
 
         if ($this->filterBy) {
