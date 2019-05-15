@@ -107,6 +107,7 @@ class Chat
                 $dialogName => [
                     'score' => $this->totalScore,
                     'time' => $this->time,
+                    'finishedAt' => date('d-m-Y H:i:s'),
                     'correctAnswerCount' => $this->correctAnswerCount
                 ],
             ];
@@ -117,6 +118,7 @@ class Chat
             $storage->results->$dialogName = [
                 'score' => $this->totalScore,
                 'time' => $this->time,
+                'finishedAt' => date('d-m-Y H:i:s'),
                 'correctAnswerCount' => $this->correctAnswerCount
             ];
         }

@@ -29,12 +29,13 @@ class Results extends Component {
             if (!(type in participant)) {
                 return;
             }
-            const { score, time, correctAnswerCount } = participant[type];
+            const { score, time, correctAnswerCount, finishedAt } = participant[type];
             filteredItems.push({
                 key:`participant_${index}`,
                 email: participant.email,
                 score,
                 time,
+                finishedAt: finishedAt ? finishedAt : '30-03-2019 00:00:00',
                 correctAnswerCount,
             });
         });
@@ -53,7 +54,12 @@ class Results extends Component {
         width: '25%',
     }, {
         key: 'time',
-        title: 'Время прохождения',
+        title: 'Длительность прохождения',
+        sortable: true,
+        width: '25%',
+    }, {
+        key: 'finishedAt',
+        title: 'Дата прохождения',
         sortable: true,
         width: '25%',
     }, {
@@ -112,16 +118,19 @@ Results.propTypes = {
         php: PropTypes.shape({
             score: PropTypes.number.isRequired,
             time: PropTypes.string.isRequired,
+            finishedAt: PropTypes.string.isRequired,
             correctAnswerCount: PropTypes.number.isRequired,
         }),
         js: PropTypes.shape({
             score: PropTypes.number.isRequired,
             time: PropTypes.string.isRequired,
+            finishedAt: PropTypes.string.isRequired,
             correctAnswerCount: PropTypes.number.isRequired,
         }),
         qa: PropTypes.shape({
             score: PropTypes.number.isRequired,
             time: PropTypes.string.isRequired,
+            finishedAt: PropTypes.string.isRequired,
             correctAnswerCount: PropTypes.number.isRequired,
         }),
     })),
